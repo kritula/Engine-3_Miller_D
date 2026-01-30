@@ -2,16 +2,6 @@ using UnityEngine;
 
 namespace OmniumLessons
 {
-	// Классы ScriptableObject в Unity позволяют создавать asset объекты для хранения данных вашей игры.
-	// Это могут быть базовые настройки, ссылки на префабы, различные ключи, спрайты итд.
-	// Главное правило, НЕЛЬЗЯ использовать ScriptableObject в качестве системы сохранения.
-	// Они разрабатывались только для удобства получения неизменяемых данных.
-	
-	// Наш класс GameData, унаследованный от ScriptableObject, будет хранить базовые настройки всей игры.
-	
-	// Атрибут CreateAssetMenu делает то, что прописано в названии: выводит пункт в меню, для быстрого создания новых GameData
-	// В данном случае, правой кнопкой мыши в окне Unity Project => Create => ZombieIO => GameData.
-	// Будет создан файл с именем GameData.
 	[CreateAssetMenu(fileName = "GameData", menuName = "ZombieIO/GameData")]
 	public class GameData : ScriptableObject
 	{

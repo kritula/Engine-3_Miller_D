@@ -1,6 +1,5 @@
 namespace OmniumLessons
 {
-	// Создаем перечисление наших персонажей
 	public enum CharacterType
 	{
 		None = 0,
