@@ -6,18 +6,27 @@ namespace OmniumLessons
     {
         [SerializeField] private CharacterFactory _characterFactory;
         [SerializeField] private GameData _gameData;
-        
+        [SerializeField] private WindowsService _windowsService;
+
         private bool _isGameActive = false;
         private  float _gameTimeSec = 0;
         
         public static GameManager Instance { get; private set; }
         
         public ScoreManager ScoreManager { get; private set; }
-        
+        public WindowsService WindowsService => _windowsService;
         public CharacterFactory CharacterFactory => _characterFactory;
         public GameData GameData => _gameData;
+        public float GameTime => _gameTimeSec;
 
         private CharacterSpawnController _spawnController;
+
+        // ƒобавим концептуально еще пон€тие "игра на паузе", в отличие от нашего урока. ¬ целом, ничего не помен€етс€, но сам контроль над игрой станет более гибким.
+        public bool IsGamePaused
+        {
+            get;
+            set;
+        } = true;
 
         private void Awake()
         {
@@ -36,6 +45,7 @@ namespace OmniumLessons
         private void Initialize()
         {
             ScoreManager = new ScoreManager();
+            _windowsService.Initialize();
         }
 
         public void StartGame()
@@ -59,11 +69,12 @@ namespace OmniumLessons
             _spawnController.StartSpawn();
 
             _isGameActive = true;
+            IsGamePaused = false;
         }
 
         private void Update()
         {
-            if (!_isGameActive)
+            if (!_isGameActive || IsGamePaused)
                 return;
             
             _gameTimeSec += Time.deltaTime;
@@ -114,9 +125,11 @@ namespace OmniumLessons
             Debug.Log("ScoreMax = " + ScoreManager.ScoreMax);
             ScoreManager.CompleteMatch();
             _isGameActive = false;
+            IsGamePaused = true;
 
             // останавливаем спавн
             _spawnController.StopSpawn();
+            WindowsService.ShowWindow<DefeatWindow>(false);
         }
 
         private void GameVictory()
@@ -124,9 +137,11 @@ namespace OmniumLessons
             Debug.Log("Game Over! Time's up!");
             ScoreManager.CompleteMatch();
             _isGameActive = false;
+            IsGamePaused = true;
 
             // останавливаем спавн
             _spawnController.StopSpawn();
+            WindowsService.ShowWindow<VictoryWindow>(false);
         }
     }
 }

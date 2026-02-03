@@ -8,7 +8,6 @@ namespace OmniumLessons
         private GameData GameData => GameManager.Instance.GameData;
 
         //внутринние счетчики
-        private float _gameTimeSeconds;
         private float _spawnTimerEnemy;
 
         //параметры роста спавна
@@ -22,10 +21,7 @@ namespace OmniumLessons
         public void StartSpawn()
         {
             _isActiveSpawn = true;
-            _gameTimeSeconds = 0f;
             _spawnTimerEnemy = 0f;
-
-            _baseMaxEnemies = 2;
         }
 
         public void StopSpawn()
@@ -38,10 +34,10 @@ namespace OmniumLessons
             if (!_isActiveSpawn)
                 return;
 
-            _gameTimeSeconds += deltaTime;
             _spawnTimerEnemy += deltaTime;
+            float gameTime = GameManager.Instance.GameTime;
             // считаем, сколько раз вырос лимит
-            int growthSteps = (int)(_gameTimeSeconds / _enemyGrowthIntervalSeconds);
+            int growthSteps = (int)(gameTime / _enemyGrowthIntervalSeconds);
 
             // считаем текущий максимум врагов
             int maxEnemiesNow = _baseMaxEnemies + growthSteps * _enemiesAddedPerStep;
@@ -57,7 +53,7 @@ namespace OmniumLessons
             if (_spawnTimerEnemy >= GameData.TimeBetweenEnemySpawn)
             {
                 SpawnEnemy();
-                _spawnTimerEnemy = 0;  // сбрасываем таймер
+                _spawnTimerEnemy = 0f;  // сбрасываем таймер
             }
         }
 

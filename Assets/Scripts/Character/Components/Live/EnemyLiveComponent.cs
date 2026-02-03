@@ -5,6 +5,7 @@ namespace OmniumLessons
     public class EnemyLiveComponent : ILiveComponent
     {
         public event Action<Character>  OnCharacterDeath;
+        public event Action<Character> OnCharacterHealthChange;
 
         private Character _characterOwner;
 
@@ -37,6 +38,7 @@ namespace OmniumLessons
         public void GetDamage(int damage)
         {
             Health -= damage * 1000;
+            OnCharacterHealthChange?.Invoke(_characterOwner);
         }
 
         private void SetDeath()

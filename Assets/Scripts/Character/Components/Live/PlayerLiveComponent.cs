@@ -6,7 +6,8 @@ namespace OmniumLessons
     public class PlayerLiveComponent : ILiveComponent
     {
         public event Action<Character>  OnCharacterDeath;
-        
+        public event Action<Character> OnCharacterHealthChange;
+
         private Character _characterOwner;
         private float _health;
 
@@ -39,6 +40,7 @@ namespace OmniumLessons
         public void GetDamage(int damage)
         {
             Health -= damage;
+            OnCharacterHealthChange?.Invoke(_characterOwner);
             Debug.Log($"I get damage by {damage}. My health is {Health}/{MaxHealth} now!");
         }
 
